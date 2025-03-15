@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soler - Solana Transaction Loader</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #9945FF;
+            --secondary-color: #14F195;
+            --dark-color: #1E1E1E;
+            --light-color: #F5F5F5;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .navbar {
+            background-color: var(--dark-color);
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 5rem 0;
+            border-radius: 0 0 2rem 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .feature-card {
+            border-radius: 1rem;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .api-section {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 4rem 0;
+            margin: 4rem 0;
+            border-radius: 2rem;
+        }
+        
+        .code-block {
+            background-color: #272822;
+            color: #f8f8f2;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        
+        .deployment-section {
+            padding: 4rem 0;
+        }
+        
+        .footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #8134e2;
+            border-color: #8134e2;
+        }
+
+        .btn-outline-light:hover {
+            color: var(--primary-color);
+        }
+        
+        .highlight {
+            color: var(--secondary-color);
+        }
+        
+        .architecture-img {
+            max-width: 100%;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="bi bi-currency-bitcoin me-2"></i>SOLER
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#api">API</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#deployment">Deployment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/pioniro/soler" target="_blank">
+                            <i class="bi bi-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Solana Transaction Loader</h1>
+                    <p class="lead mb-4">
+                        High-performance, dual API service for retrieving Solana blockchain transactions with enterprise-grade reliability and scalability.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="#features" class="btn btn-light btn-lg">Learn More</a>
+                        <a href="https://github.com/pioniro/soler" target="_blank" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-github me-2"></i>View on GitHub
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block text-center">
+                    <img src="https://solana.com/src/img/branding/solanaLogoMark.svg" alt="Solana Logo" class="img-fluid" style="max-width: 300px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Key Features</h2>
+                <p class="lead text-muted">Why choose Soler for your Solana transaction needs</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Feature 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-lightning-charge-fill"></i>
+                            </div>
+                            <h3 class="h4 mb-3">Dual API Support</h3>
+                            <p class="card-text">
+                                Choose between gRPC for high-performance microservices or HTTP for traditional web applications.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-cloud-fill"></i>
+                            </div>
+                            <h3 class="h4 mb-3">Cloud-Native</h3>
+                            <p class="card-text">
+                                Deploy anywhere with Kubernetes using our production-ready Helm chart for easy scaling.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-gear-fill"></i>
+                            </div>
+                            <h3 class="h4 mb-3">High Performance</h3>
+                            <p class="card-text">
+                                Built with Go for exceptional speed and efficiency when processing blockchain data.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <h3 class="h4 mb-3">Enterprise Ready</h3>
+                            <p class="card-text">
+                                Complete with health checks, metrics, and proper containerization for production environments.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-arrow-repeat"></i>
+                            </div>
+                            <h3 class="h4 mb-3">CI/CD Integration</h3>
+                            <p class="card-text">
+                                GitHub Actions workflows for testing, Docker builds, and Helm chart validation.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-code-slash"></i>
+                            </div>
+                            <h3 class="h4 mb-3">Developer Friendly</h3>
+                            <p class="card-text">
+                                Clean code structure, comprehensive documentation, and easy local development setup.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Section -->
+    <section id="api" class="api-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Dual API Architecture</h2>
+                <p class="lead">Flexible integration options for any application</p>
+            </div>
+            
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6">
+                    <h3 class="mb-4">HTTP API</h3>
+                    <p>
+                        RESTful interface for traditional web applications and services that need standard HTTP communication.
+                    </p>
+                    <div class="code-block mb-4">
+                        <pre><code>curl -X POST http://localhost:8080/transactions \
+  -H "Content-Type: application/json" \
+  -d '{"addresses": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"]}'</code></pre>
+                    </div>
+                    
+                    <h3 class="mb-4">gRPC API</h3>
+                    <p>
+                        High-performance binary protocol ideal for microservices and applications requiring low latency.
+                    </p>
+                    <div class="code-block">
+                        <pre><code>service TransactionService {
+  rpc GetTransactions(GetTransactionsRequest) returns (GetTransactionsResponse) {}
+}
+
+message GetTransactionsRequest {
+  repeated string addresses = 1;
+}
+
+message GetTransactionsResponse {
+  repeated Transaction transactions = 1;
+}</code></pre>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="text-center">
+                        <img src="https://miro.medium.com/max/1400/1*2vTqY8RkhEjItvhXTbKGlg.png" alt="API Architecture" class="architecture-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Deployment Section -->
+    <section id="deployment" class="deployment-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Simple Deployment</h2>
+                <p class="lead text-muted">Deploy anywhere with our cloud-native approach</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                            <h3 class="h4 mb-3">Container Ready</h3>
+                            <p class="card-text">
+                                Multi-stage Docker builds for minimal image size and optimal performance.
+                            </p>
+                            <div class="code-block mt-3">
+                                <pre><code>docker build -t soler:latest .</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-diagram-3"></i>
+                            </div>
+                            <h3 class="h4 mb-3">Kubernetes Ready</h3>
+                            <p class="card-text">
+                                Comprehensive Helm chart with configurable options for any Kubernetes environment.
+                            </p>
+                            <div class="code-block mt-3">
+                                <pre><code>helm install soler ./charts/soler</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card feature-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-laptop"></i>
+                            </div>
+                            <h3 class="h4 mb-3">Local Development</h3>
+                            <p class="card-text">
+                                Simple k3d integration for testing in a local Kubernetes environment.
+                            </p>
+                            <div class="code-block mt-3">
+                                <pre><code>make k3d-deploy</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="display-5 fw-bold mb-4">Ready to get started?</h2>
+                    <p class="lead mb-4">
+                        Deploy Soler today and start building powerful Solana applications with reliable transaction data.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="https://github.com/pioniro/soler" target="_blank" class="btn btn-primary btn-lg">
+                            <i class="bi bi-github me-2"></i>View on GitHub
+                        </a>
+                        <a href="https://github.com/pioniro/soler/blob/main/README.md" target="_blank" class="btn btn-outline-dark btn-lg">
+                            <i class="bi bi-book me-2"></i>Documentation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container">
+            <p class="mb-0">
+                &copy; 2025 Soler - Solana Transaction Loader. MIT License.
+            </p>
+            <p class="mb-0">
+                <a href="https://github.com/pioniro/soler" class="text-white" target="_blank">
+                    <i class="bi bi-github me-2"></i>GitHub
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
