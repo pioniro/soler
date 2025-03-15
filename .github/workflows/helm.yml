@@ -1,0 +1,35 @@
+name: Helm Chart
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'charts/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'charts/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Helm
+      uses: azure/setup-helm@v3
+      with:
+        version: 'latest'
+
+    - name: Lint Helm Chart
+      run: helm lint charts/soler
+
+    - name: Package Helm Chart
+      run: helm package charts/soler -d .helm-package
+
+    - name: Run Template Tests
+      run: |
+        helm template soler charts/soler > /dev/null
+        helm template soler charts/soler --set config.useMockData=false > /dev/null
+        helm template soler charts/soler --set autoscaling.enabled=true > /dev/null
