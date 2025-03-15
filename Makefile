@@ -1,4 +1,4 @@
-.PHONY: build run clean proto test cluster deploy undeploy
+.PHONY: build run clean proto test cluster deploy undeploy port-forward
 
 # Project variables
 BINARY_NAME=soler
@@ -8,6 +8,8 @@ TEST_DIR=tests
 CLUSTER_NAME=soler-cluster
 CHART_DIR=charts/soler
 DOCKER_IMAGE=soler:latest
+HTTP_PORT=8080
+GRPC_PORT=50051
 
 build:
 	go build -o $(BINARY_NAME) ./cmd/server
@@ -44,7 +46,7 @@ docker-build: build
 
 # Create a local k3d cluster
 cluster-create:
-	k3d cluster create $(CLUSTER_NAME) --agents 1 --port 8080:80@loadbalancer --port 50051:30051@loadbalancer
+	k3d cluster create $(CLUSTER_NAME) --agents 1 --port $(HTTP_PORT):80@loadbalancer --port $(GRPC_PORT):30051@loadbalancer
 
 # Delete the k3d cluster
 cluster-delete:
@@ -65,5 +67,42 @@ undeploy:
 # Create a local k3d cluster and deploy the application
 k3d-deploy: cluster-create deploy
 	@echo "Soler has been deployed to k3d cluster $(CLUSTER_NAME)"
-	@echo "HTTP API available at: http://localhost:8080"
-	@echo "gRPC API available at: localhost:50051"
+	@echo "HTTP API available at: http://localhost:$(HTTP_PORT)"
+	@echo "gRPC API available at: localhost:$(GRPC_PORT)"
+
+# Get the name of the pod to use for port forwarding
+POD_NAME = $(shell kubectl get pods -l app.kubernetes.io/name=soler -o jsonpath="{.items[0].metadata.name}" 2>/dev/null)
+
+# Port-forward for HTTP API
+port-forward-http:
+	@if [ -z "$(POD_NAME)" ]; then \
+		echo "Error: No running pods found. Deploy the application first with 'make k3d-deploy'"; \
+		exit 1; \
+	fi
+	@echo "Starting port-forward for HTTP API on port $(HTTP_PORT)..."
+	kubectl port-forward $(POD_NAME) $(HTTP_PORT):8080
+
+# Port-forward for gRPC API
+port-forward-grpc:
+	@if [ -z "$(POD_NAME)" ]; then \
+		echo "Error: No running pods found. Deploy the application first with 'make k3d-deploy'"; \
+		exit 1; \
+	fi
+	@echo "Starting port-forward for gRPC API on port $(GRPC_PORT)..."
+	kubectl port-forward $(POD_NAME) $(GRPC_PORT):50051
+
+# Port-forward for both HTTP and gRPC APIs (run in background)
+port-forward:
+	@if [ -z "$(POD_NAME)" ]; then \
+		echo "Error: No running pods found. Deploy the application first with 'make k3d-deploy'"; \
+		exit 1; \
+	fi
+	@echo "Starting port-forwards for both HTTP and gRPC APIs..."
+	@echo "HTTP API will be available at: http://localhost:$(HTTP_PORT)"
+	@echo "gRPC API will be available at: localhost:$(GRPC_PORT)"
+	@echo "Press Ctrl+C to stop the port-forwards"
+	@kubectl port-forward $(POD_NAME) $(HTTP_PORT):8080 & PID1=$$!; \
+	 kubectl port-forward $(POD_NAME) $(GRPC_PORT):50051 & PID2=$$!; \
+	 trap "kill $$PID1 $$PID2" EXIT; \
+	 echo "Port-forwards started with PIDs: $$PID1, $$PID2"; \
+	 wait

@@ -73,7 +73,26 @@ The service will be accessible at:
 - HTTP API: http://localhost:8080
 - gRPC API: localhost:50051
 
-To clean up:
+#### Port-Forwarding
+
+For direct access to the pod (useful for development and debugging):
+
+```bash
+# Forward both HTTP and gRPC ports simultaneously
+make port-forward
+
+# Forward only HTTP port
+make port-forward-http
+
+# Forward only gRPC port
+make port-forward-grpc
+```
+
+These commands automatically find the running pod and set up port forwarding to provide direct access to the application.
+
+#### Cleanup
+
+To clean up when you're done:
 
 ```bash
 # Remove the Helm deployment
