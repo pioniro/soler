@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 
 	"soler/internal/api/grpc"
 	httpapi "soler/internal/api/http"
@@ -17,8 +18,11 @@ const (
 )
 
 func main() {
+	// Get Solana RPC endpoint from environment or use default
+	endpoint := getEnvOrDefault("SOLANA_RPC_ENDPOINT", "https://api.mainnet-beta.solana.com")
+	
 	// Initialize Solana client
-	solanaClient := solana.NewClient("https://api.mainnet-beta.solana.com")
+	solanaClient := solana.NewClient(endpoint)
 
 	// Start gRPC server
 	go startGRPCServer(solanaClient)
@@ -49,4 +53,12 @@ func startHTTPServer(client *solana.Client) {
 	if err := http.ListenAndServe(httpPort, router); err != nil {
 		log.Fatalf("Failed to serve HTTP: %v", err)
 	}
+}
+
+// getEnvOrDefault gets an environment variable or returns the default value if not found
+func getEnvOrDefault(key, defaultValue string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return defaultValue
 }

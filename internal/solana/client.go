@@ -3,6 +3,7 @@ package solana
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/gagliardetto/solana-go"
@@ -33,8 +34,8 @@ func NewClient(endpoint string) *Client {
 func (c *Client) GetTransactions(ctx context.Context, addresses []string) ([]Transaction, error) {
 	var allTransactions []Transaction
 
-	// For testing purposes only - enable mock data in test environments
-	useMockData := true // This would normally be set via an environment variable
+	// Check environment variable for mock data configuration
+	useMockData := lookupEnvOrDefault("USE_MOCK_DATA", "true") == "true"
 
 	if useMockData {
 		// Return mock data for testing
@@ -109,4 +110,12 @@ func (c *Client) getMockTransactions(addresses []string) []Transaction {
 	}
 	
 	return mockTransactions
+}
+
+// lookupEnvOrDefault gets an environment variable or returns the default value if not found
+func lookupEnvOrDefault(key, defaultValue string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return defaultValue
 }
