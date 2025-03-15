@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "soler.fullname" . }}
+  labels:
+    {{- include "soler.labels" . | nindent 4 }}
+data:
+  solana-rpc-endpoint: {{ .Values.config.solanaRpcEndpoint | quote }}
+  use-mock-data: {{ .Values.config.useMockData | quote }}
