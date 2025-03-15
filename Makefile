@@ -70,6 +70,27 @@ k3d-deploy: cluster-create deploy
 	@echo "HTTP API available at: http://localhost:$(HTTP_PORT)"
 	@echo "gRPC API available at: localhost:$(GRPC_PORT)"
 
+# Create a local k3d cluster and deploy with custom Solana RPC endpoint and no mocks
+k3d-deploy-custom: cluster-create docker-build
+	@if [ -z "$(SOLANA_RPC_ENDPOINT)" ]; then \
+		echo "Error: SOLANA_RPC_ENDPOINT environment variable is required"; \
+		echo "Usage: make k3d-deploy-custom SOLANA_RPC_ENDPOINT=your-endpoint-url"; \
+		exit 1; \
+	fi
+	k3d image import $(DOCKER_IMAGE) -c $(CLUSTER_NAME)
+	helm upgrade --install $(BINARY_NAME) $(CHART_DIR) \
+		--set image.repository=soler \
+		--set image.tag=latest \
+		--set service.grpcPort=30051 \
+		--set service.type=NodePort \
+		--set config.useMockData=false \
+		--set config.solanaRpcEndpoint="$(SOLANA_RPC_ENDPOINT)"
+	@echo "Soler has been deployed to k3d cluster $(CLUSTER_NAME) with custom configuration:"
+	@echo "- Using real Solana RPC endpoint: $(SOLANA_RPC_ENDPOINT)"
+	@echo "- Mock data disabled"
+	@echo "HTTP API available at: http://localhost:$(HTTP_PORT)"
+	@echo "gRPC API available at: localhost:$(GRPC_PORT)"
+
 # Get the name of the pod to use for port forwarding
 POD_NAME = $(shell kubectl get pods -l app.kubernetes.io/name=soler -o jsonpath="{.items[0].metadata.name}" 2>/dev/null)
 

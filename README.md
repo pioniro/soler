@@ -60,14 +60,22 @@ To deploy the application to a local Kubernetes cluster using k3d:
 
 ```bash
 # Deploy to a new k3d cluster (builds Docker image, creates cluster, and deploys Helm chart)
+# This will use mock data by default (for development)
 make k3d-deploy
+```
+
+To deploy with a real Solana RPC endpoint (no mock data):
+
+```bash
+# Deploy with your custom Solana RPC endpoint
+make k3d-deploy-custom SOLANA_RPC_ENDPOINT=https://your-solana-rpc-endpoint
 ```
 
 This will:
 1. Create a local k3d Kubernetes cluster
 2. Build a Docker image for the application
 3. Load the image into the k3d cluster
-4. Deploy the Helm chart
+4. Deploy the Helm chart with your configuration
 
 The service will be accessible at:
 - HTTP API: http://localhost:8080
