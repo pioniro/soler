@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package transactions;
+option go_package = "internal/api/grpc/pb";
+
+service TransactionService {
+  rpc GetTransactions(GetTransactionsRequest) returns (GetTransactionsResponse) {}
+}
+
+message GetTransactionsRequest {
+  repeated string addresses = 1;
+}
+
+message Transaction {
+  string signature = 1;
+  string block_time = 2;
+  string slot = 3;
+  bytes data = 4; // Full transaction data
+}
+
+message GetTransactionsResponse {
+  repeated Transaction transactions = 1;
+}
